@@ -5,7 +5,7 @@ export interface Blog {
     author: string,
     _created?: string,
     _updated?: string,
-    tag: string
+    tag?: string
 }
 
 export interface Payload {

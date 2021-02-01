@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 router.post('/', (req, res) => {
     try {
         db.Tags.post(req.body.name);
-        res.send('Tag added successfully!')
+        res.json({message: 'Tag added successfully!'})
     } catch(e) {
         console.log(e);
         res.sendStatus(500);

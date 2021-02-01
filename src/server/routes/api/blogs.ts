@@ -14,14 +14,14 @@ const isAdmin: RequestHandler = (req: any, res, next) => {
 };
 
 
-router.get('/:id?', isAdmin, async (req, res, next) => {
+router.get('/:id?', async (req, res, next) => {
     try {
         let id = Number(req.params.id);
         if(id) {
             let blog = await db.Blogs.one(id);
             res.send(blog);
         } else {
-            let [blogs] = await db.Blogs.all();
+            let blogs = await db.Blogs.all();
             res.send(blogs);
         }
     } catch(e) {
@@ -30,7 +30,7 @@ router.get('/:id?', isAdmin, async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', isAdmin, async (req, res, next) => {
     try {
         let {title, content, author, tags} = req.body;
         let response = await db.Blogs.post(title, content, author, tags);
@@ -41,23 +41,23 @@ router.post('/', async (req, res, next) => {
     }
 })
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', isAdmin, async (req, res, next) => {
     try {
         let {title, content, tags} = req.body;
         let id = Number(req.params.id);
         db.Blogs.put(title, content, tags, id);
-        res.send('Blog updated successfully!');
+        res.json({message: 'Blog updated successfully!'});
     } catch(e) {
         console.log(e);
         res.sendStatus(500);
     }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', isAdmin, async (req, res) => {
     try {
         let id = Number(req.params.id);
         db.Blogs.deleter(id);
-        res.send('Blog deleted successfully!')
+        res.json({message: 'Blog deleted successfully!'})
     } catch(e) {
         console.log(e);
         res.sendStatus(500);

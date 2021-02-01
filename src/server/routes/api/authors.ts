@@ -18,7 +18,7 @@ router.put('/:id', (req, res) => {
         let user = req.body;
         user.id = Number(req.params.id);
         db.Authors.put(user);
-        res.send('Author edited!')
+        res.json({message: 'Author edited!'})
     } catch(e) {
         console.log(e);
         res.sendStatus(500);
@@ -29,7 +29,7 @@ router.delete('/:id', (req, res) => {
     try {
         let id = Number(req.params.id);
         db.Authors.deleter(id);
-        res.send('Author removed!')
+        res.json({message: 'Author removed!'})
     } catch(e) {
         console.log(e);
         res.sendStatus(500);

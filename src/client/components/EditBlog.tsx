@@ -28,12 +28,12 @@ const EditBlog: React.FC<RouteComponentProps> = ({ history }) => {
             let blog = await apiService(url); //get and set specific blog
             setBlog(blog[0]);
 
-            let currentTag = await apiService(urlCurrentTag); //get blog's current tag to make it default for the select dropdown
-            setCurrentTag(currentTag[0][0]);
+            let [currentTag] = await apiService(urlCurrentTag); //get blog's current tag to make it default for the select dropdown
+            setCurrentTag(currentTag[0]);
             
             let tags = await apiService(urlTags); //get all tags and set the JSX to display them
             let tagJsx = tags.map(tag => {
-                if(tag.name !== currentTag[0][0].name) { //make a new select box for all tags not current
+                if(tag.name !== currentTag[0].name) { //make a new select box for all tags not current
                     return (
                         <option key={tag.id} value={tag.name}>{tag.name}</option>
                     )
