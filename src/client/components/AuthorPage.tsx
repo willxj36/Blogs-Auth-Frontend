@@ -17,15 +17,26 @@ const AuthorPage: React.FC<RouteComponentProps> = ({ history }) => {
     const tagUrl = 'http://localhost:3000/api/tags';
 
     useEffect(() => { 
+        if(!User || User.userid === null) {
+            history.replace('/login')
+        } else if(User.role !== 'admin' || User.role !== 'author') {
+            alert('You need author privileges to add or edit blog posts');
+            history.replace('/');
+        };
+
         (async () => {
             let tags = await apiService(tagUrl); //gets and sets tag options
             setTags(tags);
 
             let allBlogs: Blog[] = await apiService(blogUrl);
-            let blogs: Blog[] = allBlogs.filter(blog => {
-                blog.authorid = User.userid
-            })
-            setBlogs(blogs);
+            if(User.role === 'admin') {
+                setBlogs(allBlogs);
+            } else {
+                let blogs: Blog[] = allBlogs.filter(blog => {
+                    return blog.authorid = User.userid
+                })
+                setBlogs(blogs);
+            }
         })();
     }, []);
 
@@ -72,8 +83,8 @@ const AuthorPage: React.FC<RouteComponentProps> = ({ history }) => {
                     {blogs.map(blog => {
                         let created = dayjs(`${blog._created}`).format('MMM DD, YYYY');
                         return(
-                            <Link to={`/blogs/${blog.id}/edit`}>
-                                <div className="card">
+                            <Link to={`/blogs/${blog.id}/edit`} key={blog.id}>
+                                <div className="card m-3 p-3 col-6">
                                     <h4 className="card-title">{blog.title}</h4>
                                     <h5 className="card-subtitle">{created}</h5>
                                 </div>

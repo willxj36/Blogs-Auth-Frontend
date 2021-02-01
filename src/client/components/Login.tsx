@@ -1,12 +1,17 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import apiService, { SetAccessToken } from '../../utils/apiService';
+import apiService, { SetAccessToken, User } from '../../utils/apiService';
 
-const Login: React.FC<RouteComponentProps> = ({ history }) => {
+const Login: React.FC<LoginProps> = ({ history }) => {
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    let saving: boolean = false;
+
+    useEffect(() => {
+        if(User.userid) {history.replace('/')};
+    }, []);
 
     const handleEmail = (emailText: string) => setEmail(emailText);
 
@@ -16,19 +21,27 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
 
     const handleSubmit = async () => {
         try {
+            saving = true;
             let result: any = await apiService(url, 'POST', {
                 email,
                 password
             });
             if(result) {
-                SetAccessToken(result.token, {userid: result.userid, role: result.role})
+                SetAccessToken(result.token, {userid: result.userid, role: result.role});
+                saving = false;
+                if(User.role === 'admin' || User.role === 'author') {
+                    history.push('/authorpage');
+                } else {
+                    alert('Welcome guest! To add or edit blogs, you must be a registered author. But feel free to peruse the blogs!');
+                    history.push('/');
+                }
             } else {
-    
+                alert('Login information does not match any users. Please try again.');
+                saving = false;
             }
         } catch(e) {
             throw (e);
         }
-        history.goBack();
     }
 
     return(
@@ -46,3 +59,8 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
 }
 
 export default Login;
+
+interface LoginProps extends RouteComponentProps {
+    loggedIn: boolean,
+    changeLoggedIn: () => boolean
+}

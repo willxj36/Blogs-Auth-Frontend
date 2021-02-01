@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import AuthorPage from './components/AuthorPage';
 import Previews from './components/Previews';
@@ -7,6 +7,7 @@ import FullBlog from './components/FullBlog';
 import EditBlog from './components/EditBlog';
 import Login from './components/Login';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { User } from '../utils/apiService';
 
 const App = () => {
 

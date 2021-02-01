@@ -79,7 +79,7 @@ const EditBlog: React.FC<RouteComponentProps> = ({ history }) => {
             <div className="row">
                 <button onClick={handleEdit} className="btn btn-secondary m-3">Submit Edit</button>
                 <button onClick={handleDelete} className="btn btn-danger my-3">Delete Blog</button>
-                <button onClick={() => history.goBack()} className="btn btn-warning ml-auto my-3 mr-3">Go back to blog</button>
+                <button onClick={() => history.goBack()} className="btn btn-warning ml-auto my-3 mr-3">Go back to Author Page</button>
             </div>
         </div>
     )
