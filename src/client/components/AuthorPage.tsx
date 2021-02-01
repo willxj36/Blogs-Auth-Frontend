@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
-import apiService from '../../utils/apiService';
+import apiService, { User } from '../../utils/apiService';
 import $ from 'jquery';
 import dayjs from 'dayjs';
 import { Blog } from '../../utils/models';
@@ -9,22 +9,21 @@ import { Blog } from '../../utils/models';
 const AuthorPage: React.FC<RouteComponentProps> = ({ history }) => {
 
     const [tags, setTags] = useState([]);
+    const [blogs, setBlogs] = useState<Array<Blog>>([]);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [blogs, setBlogs] = useState<Array<Blog>>([]);
-    
-    const author: string                                         //will have to add logic here to get the name of currently logged in author
+
     const blogUrl = 'http://localhost:3000/api/blogs';
-    const authorUrl = 'http://localhost:3000/api/authors';               //might not need this, saving just in case
     const tagUrl = 'http://localhost:3000/api/tags';
 
     useEffect(() => { 
         (async () => {
             let tags = await apiService(tagUrl); //gets and sets tag options
             setTags(tags);
-            let allBlogs = await apiService(blogUrl);
+
+            let allBlogs: Blog[] = await apiService(blogUrl);
             let blogs: Blog[] = allBlogs.filter(blog => {
-                blog.authorid = /* current author id */                         //have to add logic to make sure this is working out
+                blog.authorid = User.userid
             })
             setBlogs(blogs);
         })();
@@ -35,20 +34,21 @@ const AuthorPage: React.FC<RouteComponentProps> = ({ history }) => {
     const handleContent = (contentText: string) => setContent(contentText);
 
     const handleSubmit = async () => { //submits new blog
+        let authorid = User.userid;
         let tags = $('#tags').val();
         let res = await apiService(blogUrl, 'POST', {
             title,
             content,
-            author,
+            authorid,
             tags
         });
         history.push(`/blogs/${res.insertId}`); //takes you to the newly created blog
     }
 
-    return (
+    return ( //may try to make it so that User also carries actual author name at some point, for now userid will work as a stand-in
         <>
             <div className="col container shadow border">
-                <h5 className="form-label mt-4">Logged in as: {author}</h5>
+                <h5 className="form-label mt-4">Logged in as: {User.userid}</h5> 
                 <h5 className="form-label mt-4">Title</h5>
                 <input onChange={(e) => handleTitle(e.currentTarget.value)} type="text" name="title" id="title" className="form-control"/>
                 <h5 className="form-label mt-4">Content</h5>

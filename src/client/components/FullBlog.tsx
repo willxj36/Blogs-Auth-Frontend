@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import apiService from '../../utils/apiService';
+import apiService, { User } from '../../utils/apiService';
 import * as dayjs from 'dayjs';
 import { Blog } from '../../utils/models'
 
@@ -14,6 +14,7 @@ const FullBlog = () => {
         title: null,
         content: null,
         author: null,
+        authorid: null,
         _created: null,
         _updated: null,
         tag: null

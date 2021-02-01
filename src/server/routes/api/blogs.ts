@@ -32,8 +32,8 @@ router.get('/:id?', async (req, res, next) => {
 
 router.post('/', isAdmin, async (req, res, next) => {
     try {
-        let {title, content, author, tags} = req.body;
-        let response = await db.Blogs.post(title, content, author, tags);
+        let {title, content, authorid, tags} = req.body;
+        let response = await db.Blogs.post(title, content, authorid, tags);
         res.send(response);
     } catch(e) {
         console.log(e);

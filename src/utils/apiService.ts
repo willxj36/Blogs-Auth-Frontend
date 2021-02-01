@@ -1,8 +1,18 @@
+export let AccessToken: string = localStorage.getItem('token') || null;
+export let User: any = {
+    userid: localStorage.getItem('userid') || null,
+    role: localStorage.getItem('role') || null
+};
+
 const apiService = async <T = any>(uri: string, method: string = 'GET', body?: {}) => {
     const headers = new Headers();
     const options: IOptions = {
         method,
         headers
+    }
+
+    if(AccessToken) {
+        headers.append('Authorization', `Bearer ${AccessToken}`);
     }
     
     if (method === 'POST' || method === 'PUT') {
@@ -35,9 +45,17 @@ const apiService = async <T = any>(uri: string, method: string = 'GET', body?: {
 
 }
 
-
 interface IOptions {
     [key: string]: any;
+}
+
+export const SetAccessToken = (token: string, user: {userid: undefined, role: 'guest'}) => {
+    AccessToken = token;
+    User = user;
+
+    localStorage.setItem('token', token);
+    localStorage.setItem('userid', User.userid);
+    localStorage.setItem('role', User.role);
 }
 
 export default apiService;

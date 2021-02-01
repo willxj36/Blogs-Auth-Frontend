@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import * as dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
-import apiService from '../../utils/apiService';
-import { Blog } from '../../utils/models'
+import apiService, { User } from '../../utils/apiService';
+import { Blog } from '../../utils/models';
 
 const url = 'http://localhost:3000/api/blogs'
 
