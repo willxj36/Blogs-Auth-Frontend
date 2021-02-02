@@ -16,8 +16,9 @@ export interface Payload {
 }
 
 export interface User {
-    name: string,
-    email: string,
-    password: string,
+    name?: string,
+    email?: string,
+    password?: string,
+    role?: string
     id?: number
 }

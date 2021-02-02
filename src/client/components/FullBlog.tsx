@@ -39,35 +39,19 @@ const FullBlog = () => {
         }
     }, [blog]);
 
-    if (update) {
-        return (
-            <div className="container p-5 col-12">
-                <div className="row">
-                    <img src="/space-stock.jpg" alt="Header image" className="col-5 mb-5 display-inline img-responsive"/>
-                </div>
-                <h1>{blog.title}</h1>
-                <p><span className="badge badge-warning">{blog.tag}</span></p>
-                <h4 className="font-italic my-3">By {blog.author}</h4>
-                <h4 className="text-muted my-3">{date}</h4>
-                <p className="my-2 text-muted">Edited on {update}</p>
-                <p className="mt-3">{blog.content}</p>
+    return (
+        <div className="container p-5 col-12">
+            <div className="row">
+                <img src="/space-stock.jpg" alt="Header image" className="col-5 mb-5 display-inline img-responsive"/>
             </div>
-        )
-    } else {
-        return (
-            <div className="container p-5 col-12">
-                <div className="row">
-                    <img src="/space-stock.jpg" alt="Header image" className="col-5 mb-5 display-inline img-responsive"/>
-                    <Link to={`/blogs/${id}/edit`} className="display-inline btn btn-secondary align-self-start ml-auto">Edit Blog</Link>
-                </div>
-                <h1>{blog.title}</h1>
-                <p><span className="badge badge-warning">{blog.tag}</span></p>
-                <h4 className="font-italic my-3">By {blog.author}</h4>
-                <h4 className="text-muted my-3">{date}</h4>
-                <p className="mt-3">{blog.content}</p>
-            </div>
-        )
-    }
+            <h1>{blog.title}</h1>
+            <p><span className="badge badge-warning">{blog.tag}</span></p>
+            <h4 className="font-italic my-3">By {blog.author}</h4>
+            <h4 className="text-muted my-3">{date}</h4>
+            {update ? <p className="my-2 text-muted">Edited on {update}</p> : null }
+            <p className="mt-3">{blog.content}</p>
+        </div>
+    )
 }
 
 export default FullBlog;

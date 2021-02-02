@@ -32,7 +32,7 @@ const apiService = async <T = any>(uri: string, method: string = 'GET', body?: {
         }
 
         if (res.status === 401) {
-            throw new Error('Not logged in dummy');
+            throw new Error('Not logged in or no permission to do that, dummy');
         }
 
         if (res.ok) {

@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
 router.put('/:id', (req, res) => {
     try {
         let user = req.body;
-        user.id = Number(req.params.id);
-        db.Authors.put(user);
+        let id = Number(req.params.id);
+        db.Authors.put(user, id);
         res.json({message: 'Author edited!'})
     } catch(e) {
         console.log(e);
