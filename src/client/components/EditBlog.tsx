@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams, RouteComponentProps } from 'react-router-dom';
-import apiService from '../../utils/apiService';
+import apiService, { User } from '../../utils/apiService';
 import $ from 'jquery';
 import { Blog } from '../../utils/models';
 
@@ -29,6 +29,10 @@ const EditBlog: React.FC<RouteComponentProps> = ({ history }) => {
     const urlCurrentTag = `http://localhost:3000/api/blogtags/${id}`;
 
     useEffect(() => {
+        if(!User || User.userid === null || User.role === 'guest') { //only allows author and above to any edit page
+            history.push('/');
+        }
+
         (async () => {
             let [blog] = await apiService(url); //get and set specific blog
             setBlog(blog);
@@ -40,6 +44,13 @@ const EditBlog: React.FC<RouteComponentProps> = ({ history }) => {
             setTags(tags);
         })();
     }, [id]);
+
+    useEffect(() => {
+        if(User.userid !== blog.authorid && User.role !== 'admin') { //after loading blog, makes sure that an 'author' role can only edit blogs that they posted. Admin can edit any
+            alert('You can only edit your own blogs!');
+            history.push('/authorpage');
+        }
+    }, [blog]);
 
     const handleTitle = (titleText: string) => setTitle(titleText);
 

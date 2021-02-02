@@ -1,18 +1,8 @@
 import * as express from 'express';
 import db from '../../db';
-import { RequestHandler } from 'express-serve-static-core';
-
+import { isAuthor } from './permissions';
 
 const router = express.Router();
-
-const isAdmin: RequestHandler = (req: any, res, next) => {
-    if(!req.user || (req.user.role !== 'admin' && req.user.role !== 'author')) {
-        return res.sendStatus(401);
-    } else {
-        return next();
-    }
-};
-
 
 router.get('/:id?', async (req, res, next) => {
     try {
@@ -30,7 +20,7 @@ router.get('/:id?', async (req, res, next) => {
     }
 });
 
-router.post('/', isAdmin, async (req, res, next) => {
+router.post('/', isAuthor, async (req, res, next) => {
     try {
         let {title, content, authorid, tags} = req.body;
         let response = await db.Blogs.post(title, content, authorid, tags);
@@ -41,7 +31,7 @@ router.post('/', isAdmin, async (req, res, next) => {
     }
 })
 
-router.put('/:id', isAdmin, async (req, res, next) => {
+router.put('/:id', isAuthor, async (req, res, next) => {
     try {
         let {title, content, tags} = req.body;
         let id = Number(req.params.id);
@@ -53,7 +43,7 @@ router.put('/:id', isAdmin, async (req, res, next) => {
     }
 })
 
-router.delete('/:id', isAdmin, async (req, res) => {
+router.delete('/:id', isAuthor, async (req, res) => {
     try {
         let id = Number(req.params.id);
         db.Blogs.deleter(id);
